@@ -1,0 +1,166 @@
+# This will be where the introduction to the program will be located
+# 	-> How the program works
+#	-> What the program is
+#	-> User interface controls
+# ioControl is the module for displaying to shell/terminal
+# datetime is a library that allows for displaying the date and time with any format
+import datetime
+from ioControl import *
+from schedule import *
+
+# Bring in global variables from schedule.py to access across all functions
+# These will be the dPrint standard delay values
+global stdDelay
+global stdSpace
+
+
+
+# Welcome the user to the program
+#	No instructions, just a simple greeting
+#	Prints the current date and time to the user
+def welcomeUser():
+	dPrint("Hello user", stdSpace, 0) #override time delay/space
+	dPrint("...\n", 0.555, 0) #override time delay/space
+	dPrint("Welcome to the CIS30A Python Business Program!\n", stdSpace, stdDelay)
+	dPrint("\t-> Otherwise known as an appointment/delivery scheduler.\n\n", stdSpace, stdDelay)
+	today = datetime.datetime.now()
+	dPrint("Today is " + today.strftime("%B %d, %Y") + ".\n" , stdSpace, stdDelay)
+	dPrint("The time is " + today.strftime("%H:%I:%S %p") + ".\n", stdSpace, stdDelay)
+
+
+
+# Ask the user if they want to schedule an appointment or delivery (decided by string type)
+# Send the user to create the decided object due to their response
+def askCreateSchedule(type):
+	# Bring in global variables from schedule.py to function
+	# This makes it locally accessible
+	global scheduleCounter
+	global objectList
+	
+	# Declare response string that is empty
+	response = ""
+
+	# Ask the user if they want to create the schedule of the parameter type
+	# 	-> Will repeat question until their response is correct
+	dPrint("Would you like to schedule a(n) " + type + "?\n", stdSpace, stdDelay)
+	while(response.lower() != "yes" and response.lower() != "no"):
+		response = input("Please enter 'yes' or 'no':\t")
+	
+	# If user wants to create a schedule (response is 'yes')
+	# 	-> Then continue with the program prompted schedulr either appointment or delivery
+	# Appointment or delivery is defined by the parameter type
+	if(response.lower() == "yes" and type == "appointment"):
+		# type is defined as schedule type, in this case being 'appointment'
+		createSchedule(type)
+
+	elif(response.lower() == "yes" and type == "delivery"):
+		# type is defined as schedule type, in this case being 'delivery'
+		createSchedule(type)
+
+
+
+# Area to create objects from the classes
+def createSchedule(type):
+	# Bring in global variables from schedule.py to function
+	# This makes it locally accessibles
+	global scheduleCounter
+	global objectList
+
+	# Ask user to create variable that is a name of the object
+	dPrint("Please enter a reference name: ", stdSpace, stdDelay)
+	input_name = input()
+
+	# Add new variable to objectList
+	objectList.append(input_name)
+
+	# Check if creating appointment or delivery object
+	#	True is appointment
+	#	False is delivery
+	if(type == "appointment"):
+		# Convert variable name to object
+		objectList[scheduleCounter] = appointment()
+
+		# Assign arguments to class object
+		# Ask user what they want
+		dPrint("What is the appointment name?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].subject = input()
+		
+		dPrint("Where is the appointment?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].destination = input()
+		
+		dPrint("What time is the appointment?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].expected = input()
+		
+		dPrint("What is the name of the company?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].company = input()
+		
+		dPrint("What is the contact of the company?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].contact = input()
+		
+		dPrint("What is the operating hours of the company?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].hours = input()
+		
+		dPrint("What is the room number?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].room = input()
+		
+		dPrint("Who are you meeting?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].agent = input()
+
+	elif(type == "delivery"):
+		# Convert variable name to object
+		objectList[scheduleCounter] = delivery()
+		
+		# Assign arguments to class object
+		# Ask user what they want
+		dPrint("What is the name of the delivery?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].subject = input()
+		
+		dPrint("Where is the delivery going?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].destination = input()
+		
+		dPrint("When is the expected date of the delivery?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].expected = input()
+		
+		dPrint("What is the name of the company?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].company = input()
+		
+		dPrint("What is the tracking number of the delivery?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].tracking = input()
+		
+		dPrint("Where is the shipping origin of the delivery?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].origin = input()
+		
+		dPrint("When did the delivery depart?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].departed = input()
+		
+		dPrint("What items are being delivered?\t", stdSpace, stdDelay)
+		objectList[scheduleCounter].items = input()
+
+	# Increment scheduleCounter by 1 for new object if so repeated and created
+	scheduleCounter += 1
+
+
+
+def askWriteSchedule(type):
+	# Bring in global variables from schedule.py to function
+	# This makes it locally accessible
+	global scheduleCounter
+	global objectList
+	
+	# Declare response string that is empty
+	response = ""
+	
+	# Ask the user if they want to store their schedule into a file
+	# 	-> Will repeat question until their response is correct
+	dPrint("Would you like to put your " + type + " into a file?\n", stdSpace, stdDelay)
+	while(response.lower() != "yes" and response.lower() != "no"):
+		response = input("Please enter 'yes' or 'no':\t")
+
+	# Send user to write their schedule to a file based on the type and response
+	if(response.lower() == "yes" and type == "appointment"):
+		# type is defined as schedule, in this case being 'appointment'
+		writeSchedule(type, objectList[scheduleCounter - 1])
+
+	elif(response.lower() == "yes" and type == "delivery"):
+		# type is defined as schedule, in this case being 'delivery'
+		writeSchedule(type, objectList[scheduleCounter - 1])
