@@ -1,10 +1,10 @@
 from prompts import *
 
-# welcomeUser()
-# print()
-# askCreateSchedule("appointment")
-# print()
-# askCreateSchedule("delivery")
+welcomeUser()
+print()
+askCreateSchedule("appointment")
+print()
+askCreateSchedule("delivery")
 print()
 askDeleteSchedule()
 print()
